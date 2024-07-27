@@ -10,11 +10,10 @@ import {
   FiberManualRecord,
   GetAppRounded,
   GitHub,
-  InstallDesktopRounded,
-  InstallMobileRounded,
-  IosShareRounded,
+
+
   Logout,
-  PhoneIphoneRounded,
+
   SettingsRounded,
   StarRounded,
   TaskAltRounded,
@@ -93,10 +92,7 @@ export const ProfileSidebar = () => {
     setAnchorEl(null);
   };
 
-  const handleLogoutConfirmationOpen = () => {
-    setLogoutConfirmationOpen(true);
-    setAnchorEl(null);
-  };
+  
 
   const handleLogoutConfirmationClose = () => {
     setLogoutConfirmationOpen(false);
@@ -121,18 +117,9 @@ export const ProfileSidebar = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isAppInstalled, setIsAppInstalled] = useState<boolean>(false);
 
-  useEffect(() => {
-    const beforeInstallPromptHandler = (e: Event) => {
-      e.preventDefault();
-      setSupportsPWA(true);
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-    };
 
-    const detectAppInstallation = () => {
-      window.matchMedia("(display-mode: standalone)").addEventListener("change", (e) => {
-        setIsAppInstalled(e.matches);
-      });
-    };
+
+  
 
     window.addEventListener("beforeinstallprompt", beforeInstallPromptHandler);
     detectAppInstallation();
@@ -142,31 +129,7 @@ export const ProfileSidebar = () => {
     };
   }, []);
 
-  const installPWA = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === "accepted") {
-          showToast("App installed successfully!");
-          if ("setAppBadge" in navigator) {
-            setUser((prevUser) => ({
-              ...prevUser,
-              settings: [
-                {
-                  ...prevUser.settings[0],
-                  appBadge: true,
-                },
-              ],
-            }));
-          }
-          handleClose();
-        }
-        if (choiceResult.outcome === "dismissed") {
-          showToast("Installation dismissed.", { type: "error" });
-        }
-      });
-    }
-  };
+
 
   return (
     <Container>
